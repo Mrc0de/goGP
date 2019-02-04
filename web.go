@@ -11,8 +11,6 @@ func initWeb() (error, *http.Server) {
 	// only 443 is used in goBP
 	// Port 80 Requests will be redirected
 	go http.ListenAndServe(":80", http.HandlerFunc(redirect))
-	rmux := http.NewServeMux()
-	rmux.HandleFunc("/", index)
 
 	// Start https
 	r := gmux.NewRouter()
@@ -37,14 +35,4 @@ func redirect(w http.ResponseWriter, req *http.Request) {
 	target := "https://geekprojex.com/"
 	log.Printf("redirect [%s]\r\nTarget: %s", req.URL.String(), target)
 	http.Redirect(w, req, target, http.StatusSeeOther)
-}
-
-func index(w http.ResponseWriter, req *http.Request) {
-	// all calls to unknown url paths should return 404
-	if req.URL.Path != "/" && req.URL.Path != "/liveSocket" {
-		log.Printf("404: %s", req.URL.String())
-		http.NotFound(w, req)
-		return
-	}
-	w.Write([]byte("404 - Use https\n"))
 }
