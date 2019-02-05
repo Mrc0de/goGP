@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"flag"
-	"log"
+	"fmt"
 	"os"
 	"os/signal"
 	"time"
@@ -28,12 +28,14 @@ func main() {
 	// Listen in BACKGROUND
 	go func() {
 		if err := srv.ListenAndServeTLS(settings.CertFile, settings.KeyFile); err != nil {
-			log.Println(err)
+			fmt.Println("[ListenAndServerTLS] SRV_ERR: %s", err)
 		}
 	}()
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	writeLog("WebServer Started...", true)
+	// Setup Website WebSocket
+
 	// Setup Coinbase Websocket Connector
 
 	// Block until  signal.
@@ -48,5 +50,4 @@ func main() {
 	srv.Shutdown(ctx)
 	writeLog("Quitting...", true)
 	os.Exit(0)
-
 }

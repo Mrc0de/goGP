@@ -7,13 +7,15 @@ import (
 )
 
 type Config struct {
-	WsHost   string `json:"wsHost"`
-	DbHost   string `json:"dbHost"`
-	DbName   string `json:"dbName"`
-	DbUser   string `json:"dbUser"`
-	DbPass   string `json:"dbPass"`
-	CertFile string `json:"certFile"`
-	KeyFile  string `json:"keyFile"`
+	WsHost       string `json:"wsHost"`
+	DbHost       string `json:"dbHost"`
+	DbName       string `json:"dbName"`
+	DbUser       string `json:"dbUser"`
+	DbPass       string `json:"dbPass"`
+	CertFile     string `json:"certFile"`
+	KeyFile      string `json:"keyFile"`
+	SessAuthKey  string `json:"sessAuthKey"`
+	SessCryptKey string `json:"sessCryptKey"`
 }
 
 func loadconfig(filename string) (err error) {
@@ -29,8 +31,6 @@ func loadconfig(filename string) (err error) {
 		writeLog("Error Decoding settings.json..."+err.Error(), true)
 		return err
 	}
-	//writeLog("Websocket Host: "+settings.WsHost, true)
-	//writeLog("Database Host: "+settings.DbHost, true)
 	return nil
 }
 

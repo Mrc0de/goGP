@@ -1,0 +1,52 @@
+{{define "style"}}
+    <style>
+        .content {
+            background-color: #d1c9da;
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+{{end}}
+
+{{template "head" .}}
+    <div class="d-flex content">
+
+    </div>
+    <script>
+        var socket = new WebSocket("wss://{{.Conf.WsHost}}/wsConnectTo");
+        socketSetup();
+        /////////
+        function tryParseJSON (jsonString){
+            try {
+                var o = JSON.parse(jsonString);
+                if (o && typeof o === "object") {
+                    return o;
+                }
+            }
+            catch (e) { console.log(e); }
+            return false;
+        }
+        /////////
+        function socketSetup() {
+            socket.onmessage = function (e) {
+                let jObj = tryParseJSON(e.data);
+                console.log("dataz: ", e.data);
+                if ( jObj ) {
+
+                } else {
+
+                }
+            };
+            socket.onerror = function (ev) {
+                console.log("Connection Error: " + ev);
+                //$('#output').append("Connection Error...\n");
+                setTimeout(function() { socket = new WebSocket("wss://{{.Conf.WsHost}}/wsConnectTo"); socketSetup();},5000);
+            };
+            socket.onclose = function () {
+                console.log("Connection Lost!");
+                //$('#output').append("Connection Lost.\n");
+                setTimeout(function() { socket = new WebSocket("wss://{{.Conf.WsHost}}/wsConnectTo"); socketSetup(); },5000);
+            };
+        }
+    </script>
+{{template "foot"}}
